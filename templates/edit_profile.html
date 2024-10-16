@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="emoji" class="form-label">Select Emoji:</label>
+            <input type="text" class="form-control" id="emoji" name="emoji" value="{{ user.emoji }}" required>
+            <small class="form-text text-muted">Enter an emoji to use as your profile picture.</small>
+        </div>
+        <div class="mb-3">
+            <label for="bio" class="form-label">Bio:</label>
+            <textarea class="form-control" id="bio" name="bio" rows="3" required>{{ user.bio }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+    <a href="/profile" class="btn btn-secondary mt-3">Back to Profile</a>
+</div>
+{% endblock %}

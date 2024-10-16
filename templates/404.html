@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+No Post Found
+{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="display-1">Upload New Post</h1>
+    <h2 class="mt-4">No Post Found</h2>
+    <a href="/upload" class="btn btn-primary mt-3">upload</a>
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 6rem;
+        color: #dc3545; /* Bootstrap danger color */
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #343a40; /* Dark text color */
+    }
+
+    p {
+        font-size: 1.25rem;
+        color: #6c757d; /* Muted text color */
+    }
+
+    .btn {
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}

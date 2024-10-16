@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0"><i class="bi bi-cloud-arrow-up"></i> Upload Post</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/upload" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group mb-3">
+                            <label for="content" class="form-label">Post Content</label>
+                            <textarea class="form-control" id="content" name="content" rows="4" maxlength="500"
+                                      placeholder="What's on your mind?" oninput="countChars(this)" required>{{ form.content.value }}</textarea>
+                            <div class="d-flex justify-content-between">
+                                <small id="charCount" class="text-muted">0/500 characters</small>
+                                <small class="text-muted" id="content-error">{{ form.content.errors[0] if form.content.errors }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="emoji" class="form-label">Select a Mood Emoji</label>
+                            <select class="form-select" id="emoji" name="emoji">
+                                <option value="😊">😊 Happy</option>
+                                <option value="😢">😢 Sad</option>
+                                <option value="😡">😡 Angry</option>
+                                <option value="😎">😎 Cool</option>
+                                <option value="🤔">🤔 Thinking</option>
+                                <option value="🎉">🎉 Celebrating</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-cloud-upload"></i> Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// JavaScript for character counting
+function countChars(textarea) {
+    const maxLength = textarea.getAttribute('maxlength');
+    const currentLength = textarea.value.length;
+    document.getElementById("charCount").innerText = `${currentLength}/${maxLength} characters`;
+    
+    // Change color to red if max length is exceeded
+    if (currentLength >= maxLength) {
+        document.getElementById("charCount").classList.add("text-danger");
+    } else {
+        document.getElementById("charCount").classList.remove("text-danger");
+    }
+}
+</script>
+{% endblock %}

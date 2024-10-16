@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Feeds - MyApp
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Latest Posts</h2>
+    
+    <!-- Loop through posts -->
+    {% if posts %}
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm feed-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <!-- User profile picture (emoji or avatar) -->
+                            <a href="{{ url_for('user_profile', username=post.username) }}" class="user-avatar">
+                                {{ user_emojis.get(post.username, "😀") }}
+                            </a>
+                            <div class="ms-2">
+                                <a href="{{ url_for('user_profile', username=post.username) }}" class="text-decoration-none text-dark">
+                                    <h5 class="mb-0">{{ post.username }}</h5>
+                                </a>
+                                <small class="text-muted">{{ post.timestamp.strftime('%B %d, %Y %H:%M') }}</small>
+                            </div>
+                        </div>
+                        <!-- Delete post button (only for the post owner) -->
+                        {% if session['username'] == post.username %}
+                        <form action="/delete/{{ post.id }}" method="POST" class="mb-0">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p class="post-content">{{ post.content }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <div>
+                            <form action="/like/{{ post.id }}" method="POST" class="d-inline">
+                                <button class="btn btn-outline-primary btn-sm" type="submit">
+                                    <i class="bi bi-hand-thumbs-up"></i> Like ({{ post.likes | length }})
+                                </button>
+                            </form>
+                            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#comments-{{ post.id }}">
+                                <i class="bi bi-chat-left"></i> Comment ({{ post.comments | length }})
+                            </button>
+                        </div>
+                        <div>
+                            <small class="text-muted">{{ post.timestamp.strftime('%H:%M %p') }}</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="collapse" id="comments-{{ post.id }}">
+                        <div class="card-body">
+                            <form action="/comment/{{ post.id }}" method="POST" class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="comment" placeholder="Write a comment..." required>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-send"></i> Comment
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="comments-list">
+                                {% if post.comments %}
+                                    <ul class="list-group">
+                                        {% for comment in post.comments %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span><strong>{{ comment.username }}</strong>: {{ comment.text }}</span>
+                                            <small class="text-muted">{{ comment.timestamp.strftime('%H:%M %p') }}</small>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No posts available. Start uploading some!</p>
+    {% endif %}
+</div>
+
+<!-- Optional: Custom CSS for feed card and user avatar -->
+<style>
+    body {
+        background-color: #f0f2f5;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .feed-card {
+        border-radius: 10px;
+        transition: box-shadow 0.3s;
+    }
+    
+    .feed-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .user-avatar {
+        border-radius: 50%;
+        background-color: #e9ecef;
+        padding: 10px;
+        text-align: center;
+        display: inline-block;
+        font-size: 1.5rem;
+        width: 50px;
+        height: 50px;
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit the text color */
+    }
+    
+    .post-content {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .comments-list {
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    
+    .comments-list ul {
+        padding-left: 0;
+    }
+    
+    .comments-list li {
+        padding: 8px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    
+    .comments-list li:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Input and button styles */
+    .input-group input {
+        border-radius: 20px 0 0 20px;
+    }
+    
+    .input-group .btn {
+        border-radius: 0 20px 20px 0;
+    }
+</style>
+{% endblock %}

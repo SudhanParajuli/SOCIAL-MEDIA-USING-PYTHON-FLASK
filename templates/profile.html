@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="profile-header text-center mb-4">
+        <h2>Profile of {{ user.username }}</h2>
+        <div class="profile-picture" style="font-size: 100px;">
+            {{ user_emoji }}  <!-- Display the user's emoji -->
+        </div>
+        <h4>Username: <strong>{{ user.username }}</strong></h4>
+        <p><strong>Bio:</strong> {{ user_bio }}</p>
+        <button id="copy-link-btn" class="btn btn-primary" onclick="copyLink()">Copy Profile Link</button>
+        <input type="text" id="profile-link" value="{{ profile_link }}" style="position: absolute; left: -9999px;">
+    </div>
+
+    <h3>Your Posts ({{ posts|length }})</h3>
+    <ul class="post-list">
+        {% for post in posts %}
+        <li class="post-item">
+            <strong>{{ post.content }}</strong>
+            <br>
+            <small>Posted on {{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            <br>
+            <small>Likes: {{ post.likes|length }}</small>
+        </li>
+        {% endfor %}
+        {% if not posts %}
+        <li>No posts available.</li>
+        {% endif %}
+    </ul>
+    
+    <a href="/edit-profile" class="btn btn-secondary">Edit Profile</a>
+</div>
+
+<script>
+function copyLink() {
+    var copyText = document.getElementById("profile-link");
+    copyText.style.position = 'relative'; // Temporarily adjust position
+    copyText.style.zIndex = 1; // Bring it to front if necessary
+    copyText.select(); // Select the input field
+    document.execCommand("copy"); // Copy the text inside the input field
+    alert("Profile link copied: " + copyText.value); // Show copied text
+
+    // Reset position to hide the input field
+    copyText.style.position = 'absolute'; 
+    copyText.style.left = '-9999px'; 
+}
+</script>
+{% endblock %}
