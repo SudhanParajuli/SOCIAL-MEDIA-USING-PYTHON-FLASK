@@ -9,6 +9,7 @@ Features
 
 *   User authentication (registration and login)
 *   Create, edit, and delete posts
+*   Edit and Update Bio And profile Picture
 *   Like and comment on posts
 
 Installation
